@@ -1,20 +1,5 @@
-FROM microsoft/aspnetcore:2.0 AS base
+FROM microsoft/aspnetcore:2.0
 WORKDIR /app
 EXPOSE 80
-
-FROM microsoft/aspnetcore-build:2.0 AS build
-WORKDIR /src
-COPY GP.Microservices.sln ./
-COPY GP.Microservices.Api/GP.Microservices.Api.csproj GP.Microservices.Api/
-RUN dotnet restore -nowarn:msb3202,nu1503
-COPY . .
-WORKDIR /src/GP.Microservices.Api
-RUN dotnet build -c Release -o /app
-
-FROM build AS publish
-RUN dotnet publish -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app .
+COPY ./bin/Release/publish .
 ENTRYPOINT ["dotnet", "GP.Microservices.Api.dll"]

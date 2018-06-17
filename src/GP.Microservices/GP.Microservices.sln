@@ -11,11 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monolith", "Monolith", "{FD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4E04FCF6-4DC9-47C2-A699-1D3892E662E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GP.Microservices.Common", "GP.Microservices.Common\GP.Microservices.Common.csproj", "{25847B96-7837-4143-876C-18C7DD3D2FA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GP.Microservices.Common", "GP.Microservices.Common\GP.Microservices.Common.csproj", "{25847B96-7837-4143-876C-18C7DD3D2FA8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GP.Microservices.Api", "GP.Microservices.Api\GP.Microservices.Api.csproj", "{6B63A132-B4BB-410F-B29D-FD4AA0FCE721}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GP.Microservices.Users", "GP.Microservices.Users\GP.Microservices.Users.csproj", "{1E93CCC7-5696-4859-A75A-EB93A731A36D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GP.Microservices.Users", "GP.Microservices.Users\GP.Microservices.Users.csproj", "{1E93CCC7-5696-4859-A75A-EB93A731A36D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{3A77C222-54CD-487C-BD70-28EB5668A8EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

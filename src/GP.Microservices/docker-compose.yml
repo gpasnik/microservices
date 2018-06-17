@@ -2,10 +2,10 @@ version: '3'
 
 services:
   gp.microservices.api:
-    image: gpmicroservicesapi
+    image: gpasnik/microservices-api
     build:
-      context: .
-      dockerfile: GP.Microservices.Api/Dockerfile
+      context: GP.Microservices.Api
+      dockerfile: ./Dockerfile
     ports:
       - "10000:80"
     links:
@@ -16,10 +16,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
 
   gp.microservices.users:
-    image: gpmicroservicesusers
+    image: gpasnik/microservices-users
     build:
-      context: .
-      dockerfile: GP.Microservices.Users/Dockerfile
+      context: GP.Microservices.Users
+      dockerfile: ./Dockerfile
     ports:
       - "10001:80"
     links:
