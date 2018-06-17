@@ -13,9 +13,9 @@ init:
   git config --global core.autocrlf true
 before_build:
   - cmd: dotnet --version
-  - cmd: dotnet restore ./src/GP.Microservices/GP.Microservices.Api.csproj --verbosity m
-  - cmd: dotnet restore ./src/GP.Microservices/GP.Microservices.Users.csproj --verbosity m
+  - cmd: dotnet restore ./src/GP.Microservices/GP.Microservices.Api/GP.Microservices.Api.csproj --verbosity m
+  - cmd: dotnet restore ./src/GP.Microservices/GP.Microservices.Users/GP.Microservices.Users.csproj --verbosity m
 build_script:
-  - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Api.csproj 
-  - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Users.csproj 
+  - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Api/GP.Microservices.Api.csproj 
+  - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Users/GP.Microservices.Users.csproj 
 deploy: off
