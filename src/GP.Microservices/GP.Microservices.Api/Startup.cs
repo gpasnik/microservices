@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using GP.Microservices.Common;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,12 +38,14 @@ namespace GP.Microservices.Api
             builder.RegisterConsumers(Assembly.GetExecutingAssembly());
             builder.Register(context =>
                 {
+                    var config = new RabbitMqConfiguration();
+                    Configuration.Bind("RabbitMq", config);
                     var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
                     {
-                        var host = cfg.Host(new Uri("rabbitmq://rabbit:5672"), h =>
+                        var host = cfg.Host(new Uri(config.Host), h =>
                         {
-                            h.Username("guest");
-                            h.Password("guest");
+                            h.Username(config.User);
+                            h.Password(config.Password);
                             h.Heartbeat(5);
                         });
                     });
