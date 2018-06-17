@@ -18,4 +18,11 @@ before_build:
 build_script:
   - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Api/GP.Microservices.Api.csproj 
   - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Users/GP.Microservices.Users.csproj 
+artifacts:
+  - path: './src/GP.Microservices/GP.Microservices.Api/bin/Debug/netcoreapp1.1/publish'
+    name: GP.Microservices.Api
+    type: zip
+  - path: './src/GP.Microservices/GP.Microservices.Users/bin/Debug/netcoreapp1.1/publish'
+    name: GP.Microservices.Users
+    type: zip
 deploy: off
