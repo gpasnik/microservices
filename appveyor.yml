@@ -1,0 +1,21 @@
+version: '1.0.{build}'
+branches:
+  only:
+  - master
+skip_tags: true
+nuget:
+  disable_publish_on_pr: true
+image: Visual Studio 2017
+configuration: Release
+environment:
+  VisualStudioVersion: 15.0
+init:
+  git config --global core.autocrlf true
+before_build:
+  - cmd: dotnet --version
+  - cmd: dotnet restore ./src/GP.Microservices/GP.Microservices.Api.csproj --verbosity m
+  - cmd: dotnet restore ./src/GP.Microservices/GP.Microservices.Users.csproj --verbosity m
+build_script:
+  - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Api.csproj 
+  - cmd: dotnet publish ./src/GP.Microservices/GP.Microservices.Users.csproj 
+deploy: off
