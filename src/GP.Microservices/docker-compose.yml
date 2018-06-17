@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  gp.microservices.api:
+    image: gpmicroservicesapi
+    build:
+      context: .
+      dockerfile: GP.Microservices.Api/Dockerfile
+    ports:
+      - "10000:80"
+    links:
+      - "rabbitmq:rabbit"
+    depends_on:
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  gp.microservices.users:
+    image: gpmicroservicesusers
+    build:
+      context: .
+      dockerfile: GP.Microservices.Users/Dockerfile
+    ports:
+      - "10001:80"
+    links:
+      - "rabbitmq:rabbit"
+      - "sqlserver:db"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+  
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  sqlserver:
+    image: "microsoft/mssql-server-linux:2017-latest"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "123QWEasd"
+    ports:
+      - "5433:1433"
