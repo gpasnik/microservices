@@ -1,0 +1,6 @@
+FROM microsoft/aspnetcore:2.0 AS base
+WORKDIR /app
+EXPOSE 80
+COPY ./bin/Release/publish .
+RUN ls
+ENTRYPOINT ["dotnet", "GP.Microservices.Storage.dll"]

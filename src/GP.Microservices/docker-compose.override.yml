@@ -1,3 +1,11 @@
-version: '3'
+version: '3.4'
 
+
+
+services:
+  gp.microservices.storage:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
 

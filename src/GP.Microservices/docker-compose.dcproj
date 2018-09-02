@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
   <PropertyGroup Label="Globals">
-    <ProjectVersion>2.0</ProjectVersion>
+    <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>83e674c2-d492-4e44-bf03-114389954e48</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
@@ -10,15 +10,25 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.debug.yml">
-    <DependentUpon>docker-compose.yml</DependentUpon>
+      <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.release.yml">
-    <DependentUpon>docker-compose.yml</DependentUpon>
+      <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="kubeconfig-gp-namespace.yaml" />
+    <None Include="kubeconfig-rolebinding-deployment-manager.yaml" />
+    <None Include="kubeconfig-manage-deployments-role.yaml" />
+    <None Include="kubeconfig-service-account-role-binding.yaml" />
+    <None Include="kubeconfig-service-account.yaml" />
+    <None Include="kubeconfig.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 </Project>

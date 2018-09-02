@@ -3,11 +3,14 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GP.Microservices.Common;
+using GP.Microservices.Common.Authentication;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace GP.Microservices.Api
 {
@@ -33,13 +36,15 @@ namespace GP.Microservices.Api
             services.AddMvc();
             services.AddAutofac();
 
+            services.Configure<JwtSettings>(Configuration.GetSection("Jwt"));
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterConsumers(Assembly.GetExecutingAssembly());
             builder.Register(context =>
                 {
-                    var config = new RabbitMqConfiguration();
-                    Configuration.Bind("RabbitMq", config);
+                    var config = context.Resolve<IOptions<RabbitMqConfiguration>>().Value;
                     var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
                     {
                         var host = cfg.Host(new Uri(config.Host), h =>
@@ -55,6 +60,8 @@ namespace GP.Microservices.Api
                 .SingleInstance()
                 .As<IBusControl>()
                 .As<IBus>();
+
+            builder.RegisterType<JwtTokenService>().AsImplementedInterfaces().SingleInstance();
 
             ApplicationContainer = builder.Build();
 

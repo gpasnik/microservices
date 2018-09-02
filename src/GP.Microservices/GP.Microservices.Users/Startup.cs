@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GP.Microservices.Common;
+using GP.Microservices.Common.Authentication;
 using GP.Microservices.Users.Data;
 using GP.Microservices.Users.Handlers;
 using MassTransit;
@@ -35,6 +36,7 @@ namespace GP.Microservices.Users
         {
             services.AddMvc();
             services.AddAutofac();
+            services.AddJwtAuthentication(Configuration);
 
             var connection = Configuration.GetConnectionString("UsersDb");
             //var connection = @"Server=db;Database=GP.Microservices.Users;User=sa;Password=123QWEasd;MultipleActiveResultSets=true;";

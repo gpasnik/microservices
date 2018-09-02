@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
   gp.microservices.api:
@@ -13,7 +13,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
 
   gp.microservices.users:
     image: gpasnik/microservices-users
@@ -29,7 +29,55 @@ services:
       - rabbitmq
       - sqlserver
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      ASPNETCORE_ENVIRONMENT: Development
+
+  gp.microservices.remarks:
+    image: gpasnik/microservices-remarks
+    build:
+      context: GP.Microservices.Remarks
+      dockerfile: ./Dockerfile
+    ports:
+      - "10002:80"
+    links:
+      - "rabbitmq:rabbit"
+      - "sqlserver:db"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+  gp.microservices.statistics:
+    image: gpasnik/microservices-statistics
+    build:
+      context: GP.Microservices.Statistics
+      dockerfile: ./Dockerfile
+    ports:
+      - "10003:80"
+    links:
+      - "rabbitmq:rabbit"
+      - "sqlserver:db"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT : Development
+
+  gp.microservices.storage:
+    image: gpasnik/microservices-storage
+    build:
+      context: GP.Microservices.Storage
+      dockerfile: ./Dockerfile
+    ports:
+      - "10004:80"
+    links:
+      - "rabbitmq:rabbit"
+      - "sqlserver:db"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
   
   rabbitmq:
     image: "rabbitmq:3-management"
