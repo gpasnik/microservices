@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GP.Microservices.Common;
 using GP.Microservices.Common.Authentication;
+using GP.Microservices.Common.Messages.Users.Commands;
 using GP.Microservices.Users.Data;
 using GP.Microservices.Users.Handlers;
 using MassTransit;
@@ -61,10 +62,46 @@ namespace GP.Microservices.Users
                             h.Heartbeat(5);
                         });
 
-                        cfg.ReceiveEndpoint(host, "sample_message_queue", c =>
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(RegisterUser)}", c =>
                         {
                             // otherwise, be smart, register explicitly
-                            c.Consumer<SampleMessageHandler>(context);
+                            c.Consumer<UserCommandHandler>(context);
+                        });
+
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(ActivateUser)}", c =>
+                        {
+                            // otherwise, be smart, register explicitly
+                            c.Consumer<UserCommandHandler>(context);
+                        });
+
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(DeleteUser)}", c =>
+                        {
+                            // otherwise, be smart, register explicitly
+                            c.Consumer<UserCommandHandler>(context);
+                        });
+
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(BlockUser)}", c =>
+                        {
+                            // otherwise, be smart, register explicitly
+                            c.Consumer<UserCommandHandler>(context);
+                        });
+
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(UnblockUser)}", c =>
+                        {
+                            // otherwise, be smart, register explicitly
+                            c.Consumer<UserCommandHandler>(context);
+                        });
+
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(ChangeUserPassword)}", c =>
+                        {
+                            // otherwise, be smart, register explicitly
+                            c.Consumer<UserCommandHandler>(context);
+                        });
+
+                        cfg.ReceiveEndpoint(host, $"UserService:{nameof(ResetUserPassword)}", c =>
+                        {
+                            // otherwise, be smart, register explicitly
+                            c.Consumer<UserCommandHandler>(context);
                         });
                     });
 
