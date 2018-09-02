@@ -1,0 +1,11 @@
+﻿using System;
+
+namespace GP.Microservices.Common.Messages.Remarks.Events
+{
+    public class DeleteRemarkFailed
+    {
+        public Guid RemarkId { get; set; }
+
+        public Guid UserId { get; set; }
+    }
+}

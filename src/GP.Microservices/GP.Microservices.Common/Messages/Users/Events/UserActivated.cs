@@ -1,0 +1,11 @@
+﻿using System;
+
+namespace GP.Microservices.Common.Messages.Users.Events
+{
+    public class UserActivated
+    {
+        public Guid Id { get; set; }
+
+        public string Username { get; set; }
+    }
+}
