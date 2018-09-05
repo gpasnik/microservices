@@ -2,6 +2,8 @@
 {
     public class ActivateUser
     {
+        public string Username { get; set; }
+
         public string ActivationToken { get; set; }
     }
 }
