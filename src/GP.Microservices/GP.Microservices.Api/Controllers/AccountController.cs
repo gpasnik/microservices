@@ -33,5 +33,11 @@ namespace GP.Microservices.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("sign-up")]
+        public IActionResult SignUp([FromBody] SignUp request)
+        {
+            return NoContent();
+        }
     }
 }
