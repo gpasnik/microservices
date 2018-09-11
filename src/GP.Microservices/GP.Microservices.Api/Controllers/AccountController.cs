@@ -28,7 +28,9 @@ namespace GP.Microservices.Api.Controllers
         {
             var username = HttpContext.GetUsername();
 
-            var result = await _userService.GetUserAsync(username);
+            var result = await _userService
+                .GetUserAsync(username)
+                .OrFailAsync();
 
             return Ok(result);
         }
@@ -51,7 +53,7 @@ namespace GP.Microservices.Api.Controllers
 
             if (result.Failure)
             {
-                return StatusCode(403, new ApiError {ErrorCode = result.Error.Code, Message = result.Error.Code});
+                return StatusCode(403, new ApiError {ErrorCode = result.Error.Code, Message = result.Error.Message});
             }
 
             var token = _jwtHandler.Create(result.Result.Id, request.Username);

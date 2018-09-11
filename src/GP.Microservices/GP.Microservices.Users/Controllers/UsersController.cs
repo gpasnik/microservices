@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GP.Microservices.Common.Dto;
 using GP.Microservices.Common.Messages.Users.Commands;
+using GP.Microservices.Users.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Users.Controllers
@@ -9,9 +9,11 @@ namespace GP.Microservices.Users.Controllers
     [Route("api/users")]
     public class UsersController : Controller
     {
-        public UsersController()
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService)
         {
-            
+            _userService = userService;
         }
 
         [HttpGet]
@@ -23,24 +25,17 @@ namespace GP.Microservices.Users.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
-            throw new NotImplementedException();
+            var result = await _userService.GetAsync(username);
+
+            return Ok(result);
         }
 
         [HttpPost("{username}/authorize")]
         public async Task<IActionResult> Authorize(string username, [FromBody] AuthorizeUser command)
         {
-            if (command.Username == "user" && command.Password == "password")
-            {
-                var user = await Task.FromResult(new UserDto
-                {
-                    Id = Guid.NewGuid(),
-                    Username = command.Username
-                });
+            var result = await _userService.AuthorizeAsync(command);
 
-                return Ok(user);
-            }
-
-            return Unauthorized();
+            return Ok(result);
         }
     }
 }

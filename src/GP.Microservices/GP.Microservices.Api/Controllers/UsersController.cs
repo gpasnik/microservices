@@ -24,7 +24,9 @@ namespace GP.Microservices.Api.Controllers
         public async Task<IActionResult> Browse()
         {
             var query = new BrowseUsers();
-            var result = await _storageService.BrowseUsersAsync(query);
+            var result = await _storageService
+                .BrowseUsersAsync(query)
+                .OrFailAsync();
 
             return Ok(result);
         }
@@ -32,7 +34,9 @@ namespace GP.Microservices.Api.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
-            var result = await _storageService.GetUserAsync(username);
+            var result = await _storageService
+                .GetUserAsync(username)
+                .OrFailAsync();
 
             return Ok(result);
         }
@@ -45,7 +49,9 @@ namespace GP.Microservices.Api.Controllers
                 Username = username
             };
 
-            var result = await _userService.BlockUserAsync(command);
+            var result = await _userService
+                .BlockUserAsync(command)
+                .OrFailAsync();
 
             return Ok(result);
         }
@@ -58,7 +64,9 @@ namespace GP.Microservices.Api.Controllers
                 Username = username
             };
 
-            var result = await _userService.UnblockUserAsync(command);
+            var result = await _userService
+                .UnblockUserAsync(command)
+                .OrFailAsync();
 
             return Ok(result);
         }

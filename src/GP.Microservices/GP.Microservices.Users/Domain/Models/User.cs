@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GP.Microservices.Users.Domain.Models
 {
     public class User
     {
+        [Key]
         public Guid Id { get; set; }
 
         public string Username { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GP.Microservices.Common.Exceptions;
 
 namespace GP.Microservices.Common.ServiceClients
 {
@@ -9,7 +10,7 @@ namespace GP.Microservices.Common.ServiceClients
         {
             var result = await response;
             if (result.Failure)
-                throw new Exception(result.AggregatedErrors);
+                throw new ServiceException(result.Error);
 
             return result.Result;
         }

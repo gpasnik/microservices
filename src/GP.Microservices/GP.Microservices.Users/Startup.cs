@@ -5,7 +5,9 @@ using Autofac.Extensions.DependencyInjection;
 using GP.Microservices.Common;
 using GP.Microservices.Common.Authentication;
 using GP.Microservices.Common.Messages.Users.Commands;
+using GP.Microservices.Common.Middlewares;
 using GP.Microservices.Users.Data;
+using GP.Microservices.Users.Domain.Services;
 using GP.Microservices.Users.Handlers;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -40,8 +42,6 @@ namespace GP.Microservices.Users
             services.AddJwtAuthentication(Configuration);
 
             var connection = Configuration.GetConnectionString("UsersDb");
-            //var connection = @"Server=db;Database=GP.Microservices.Users;User=sa;Password=123QWEasd;MultipleActiveResultSets=true;";
-            //var connection = @"Server=host.docker.internal,52915;Database=GP.Microservices.Users;User=sa;Password=123QWEasd;MultipleActiveResultSets=true;";
             services.AddDbContext<UsersContext>(options => options.UseSqlServer(connection));
 
             // Create the container builder.
@@ -49,6 +49,8 @@ namespace GP.Microservices.Users
             builder.Populate(services);
 
             builder.RegisterConsumers(Assembly.GetExecutingAssembly());
+            builder.RegisterType<UserService>().AsImplementedInterfaces();
+
             builder.Register(context =>
                 {
                     var config = new RabbitMqConfiguration();
@@ -128,6 +130,7 @@ namespace GP.Microservices.Users
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ErrorWrappingMiddleware>();
             app.UseMvc();
 
             var context = ApplicationContainer.Resolve<UsersContext>();

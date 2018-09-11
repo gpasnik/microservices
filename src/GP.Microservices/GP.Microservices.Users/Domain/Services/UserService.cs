@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GP.Microservices.Common.Exceptions;
+using GP.Microservices.Common.Messages.Users.Commands;
+using GP.Microservices.Common.ServiceClients;
 using GP.Microservices.Users.Data;
 using GP.Microservices.Users.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GP.Microservices.Users.Domain.Services
 {
@@ -12,6 +16,34 @@ namespace GP.Microservices.Users.Domain.Services
         public UserService(UsersContext context)
         {
             _context = context;
+        }
+
+        public async Task<User> GetAsync(string username)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+            if (user == null)
+                throw new ServiceException(new ServiceError("User does not exist", 404));
+
+            return user;
+        }
+
+        public async Task<User> GetAsync(Guid id)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+                throw new ServiceException(new ServiceError("User does not exist", 404));
+
+            return user;
+        }
+
+        public async Task<User> AuthorizeAsync(AuthorizeUser command)
+        {
+            var user = await GetAsync(command.Username);
+
+            if (user.Password != command.Password)
+                throw new ServiceException(new ServiceError("Invalid password", 401));
+
+            return user;
         }
 
         public async Task<User> RegisterAsync(string username, string password, string email, string name,

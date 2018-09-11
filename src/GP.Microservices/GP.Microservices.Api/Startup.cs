@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GP.Microservices.Common;
 using GP.Microservices.Common.Authentication;
+using GP.Microservices.Common.Middlewares;
 using GP.Microservices.Common.ServiceClients;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -86,15 +87,11 @@ namespace GP.Microservices.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseCors(o => o.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
+            app.UseMiddleware<ErrorWrappingMiddleware>();
             app.UseAuthentication();
             app.UseMvc();
 
