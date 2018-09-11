@@ -26,8 +26,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> Get()
         {
-            //TODO: get username from token
-            var username = "get username from token";
+            var username = HttpContext.GetUsername();
 
             var result = await _userService.GetUserAsync(username);
 
@@ -55,7 +54,7 @@ namespace GP.Microservices.Api.Controllers
                 return StatusCode(403, new ApiError {ErrorCode = result.Error.Code, Message = result.Error.Code});
             }
 
-            var token = _jwtHandler.Create(request.Username);
+            var token = _jwtHandler.Create(result.Result.Id, request.Username);
 
             return Ok(token);
         }
@@ -83,12 +82,12 @@ namespace GP.Microservices.Api.Controllers
 
             return Ok(result.Username);
         }
-
+        
+        [Authorize]
         [HttpDelete("me")]
         public async Task<IActionResult> Delete()
         {
-            //TODO: get username from token
-            var username = "get username from token";
+            var username = HttpContext.User.Identity.Name;
 
             var command = new DeleteUser
             {

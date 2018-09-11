@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -25,5 +27,18 @@ namespace GP.Microservices.Common.Authentication
                     options.RequireHttpsMetadata = false;
                 });
         }
+
+        public static Guid GetUserId(this HttpContext context)
+        {
+            if (context.User?.HasClaim(c => c.Type.Contains("nameidentifier")) != true)
+                return Guid.Empty;
+
+            var id = context.User.FindFirst(c => c.Type.Contains("nameidentifier")).Value;
+
+            return Guid.Parse(id);
+        }
+
+        public static string GetUsername(this HttpContext context)
+            => context?.User?.Identity?.Name;
     }
 }

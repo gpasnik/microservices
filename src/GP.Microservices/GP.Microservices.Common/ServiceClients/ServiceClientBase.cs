@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -33,7 +34,7 @@ namespace GP.Microservices.Common.ServiceClients
         protected async Task<Response<T>> GetAsync<T>(string endpoint)
         {
             var response = await HttpClient
-                .GetAsync(WebUtility.UrlEncode(endpoint))
+                .GetAsync(UrlEncodeEndpoint(endpoint))
                 .ConfigureAwait(false);
 
             return await Response<T>.CreateAsync(response);
@@ -44,7 +45,7 @@ namespace GP.Microservices.Common.ServiceClients
             var requestContent = GetStringPayload(payload);
 
             var response = await HttpClient
-                .PostAsync(WebUtility.UrlEncode(endpoint), requestContent);
+                .PostAsync(UrlEncodeEndpoint(endpoint), requestContent);
 
             return await Response<T>.CreateAsync(response);
         }
@@ -54,7 +55,7 @@ namespace GP.Microservices.Common.ServiceClients
             var requestContent = GetStringPayload(payload);
 
             var response = await HttpClient
-                .PutAsync(WebUtility.UrlEncode(endpoint), requestContent);
+                .PutAsync(UrlEncodeEndpoint(endpoint), requestContent);
 
             return await Response<T>.CreateAsync(response);
         }
@@ -62,9 +63,18 @@ namespace GP.Microservices.Common.ServiceClients
         protected async Task<Response<T>> DeleteAsync<T>(string endpoint)
         {
             var response = await HttpClient
-                .DeleteAsync(WebUtility.UrlEncode(endpoint));
+                .DeleteAsync(UrlEncodeEndpoint(endpoint));
 
             return await Response<T>.CreateAsync(response);
+        }
+
+        private string UrlEncodeEndpoint(string endpoint)
+        {
+            var segments = endpoint.Split('/')
+                .Select(WebUtility.UrlEncode)
+                .ToList();
+
+            return string.Join('/', segments);
         }
 
         private StringContent GetStringPayload<T>(T payload)

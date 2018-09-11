@@ -10,6 +10,10 @@ services:
       - "10000:80"
     links:
       - "rabbitmq:rabbit"
+      - "gp.microservices.users:users"
+      - "gp.microservices.remarks:remarks"
+      - "gp.microservices.statistics:statistics"
+      - "gp.microservices.storage:storage"
     depends_on:
       - rabbitmq
     environment:
@@ -20,6 +24,7 @@ services:
     build:
       context: GP.Microservices.Users
       dockerfile: ./Dockerfile
+    hostname: users
     ports:
       - "10001:80"
     links:

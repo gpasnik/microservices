@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GP.Microservices.Api.Models;
+using GP.Microservices.Common.Authentication;
 using GP.Microservices.Common.Messages.Remarks.Commands;
 using GP.Microservices.Common.Messages.Remarks.Queries;
 using GP.Microservices.Common.ServiceClients;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Api.Controllers
 {
+    [Authorize]
     [Route("api/remarks")]
     public class RemarksController : ControllerBase
     {
@@ -25,8 +28,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Browse()
         {
-            //TODO get username from token and load default settings
-            var username = "get username from token";
+            var username = HttpContext.User.Identity.Name;
 
             var query = new BrowseRemarks
             {
@@ -56,8 +58,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRemarkRequest request)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             if (ModelState.IsValid == false)
             {
@@ -84,8 +85,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPut("{id:guid}/resolve")]
         public async Task<IActionResult> Resolve(Guid id)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var command = new ResolveRemark
             {
@@ -103,8 +103,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPut("{id:guid}/cancel")]
         public async Task<IActionResult> Cancel(Guid id)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var command = new CancelRemark
             {
@@ -122,8 +121,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var remark = await _storageService
                 .GetRemarkAsync(id)
@@ -150,8 +148,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPost("{remarkId:guid}/images")]
         public async Task<IActionResult> AddImage(Guid remarkId, [FromBody] AddImageRequest request)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             if (ModelState.IsValid == false)
             {
@@ -175,11 +172,10 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{remarkId:guid/images/{imageId:guid}")]
+        [HttpDelete("{remarkId:guid}/images/{imageId:guid}")]
         public async Task<IActionResult> RemoveImage(Guid remarkId, Guid imageId)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var command = new RemoveImage
             {
@@ -198,8 +194,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPost("{remarkId:guid}/comments")]
         public async Task<IActionResult> AddComment(Guid remarkId, [FromBody] AddCommentRequest request)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var command = new AddComment
             {
@@ -219,8 +214,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPost("{remarkId:guid}/comments/{commentId:guid}")]
         public async Task<IActionResult> RemoveComment(Guid remarkId, Guid commentId)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var command = new RemoveComment
             {
@@ -239,8 +233,7 @@ namespace GP.Microservices.Api.Controllers
         [HttpPost("{remarkId:guid}/activities")]
         public async Task<IActionResult> AddActivity(Guid remarkId, [FromBody] AddActivityRequest request)
         {
-            //TODO get userid from token
-            var userId = Guid.NewGuid();
+            var userId = HttpContext.GetUserId();
 
             var command = new AddActivity
             {

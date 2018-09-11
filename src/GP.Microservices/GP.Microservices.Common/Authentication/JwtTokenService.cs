@@ -23,7 +23,7 @@ namespace GP.Microservices.Common.Authentication
             _jwtHeader = new JwtHeader(signingCredentials);
         }
 
-        public JsonWebToken Create(string userId)
+        public JsonWebToken Create(Guid userId, string username)
         {
             var nowUtc = DateTime.UtcNow;
             var expires = nowUtc.AddHours(_settings.ExpiryHours);
@@ -34,7 +34,7 @@ namespace GP.Microservices.Common.Authentication
             var payload = new JwtPayload
             {
                 {"sub", userId},
-                {"unique_name", userId},
+                {"unique_name", username},
                 {"iss", issuer},
                 {"iat", now},
                 {"nbf", now},
