@@ -17,6 +17,9 @@ namespace GP.Microservices.Common.ServiceClients
         public async Task<Response<UserDto>> ActivateUserAsync(ActivateUser command)
             => await PutAsync<UserDto>($"users/{command.Username}/activate", command);
 
+        public async Task<Response<UserDto>> AuthorizeUserAsync(AuthorizeUser command)
+            => await PostAsync<UserDto>($"users/{command.Username}/authorize", command);
+
         public async Task<Response<UserDto>> BlockUserAsync(BlockUser command)
             => await PutAsync<UserDto>($"users/{command.Username}/block", command);
 

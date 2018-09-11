@@ -9,6 +9,8 @@ namespace GP.Microservices.Common.ServiceClients
     {
         Task<Response<UserDto>> ActivateUserAsync(ActivateUser command);
 
+        Task<Response<UserDto>> AuthorizeUserAsync(AuthorizeUser command); 
+        
         Task<Response<UserDto>> BlockUserAsync(BlockUser command);
 
         Task<Response<UserDto>> ChangeUserPasswordAsync(ChangeUserPassword command);

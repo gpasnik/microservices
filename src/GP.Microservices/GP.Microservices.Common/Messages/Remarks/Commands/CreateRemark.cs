@@ -13,5 +13,7 @@ namespace GP.Microservices.Common.Messages.Remarks.Commands
         public double Longitude { get; set; }
 
         public Guid CategoryId { get; set; }
+
+        public Guid UserId { get; set; }
     }
 }
