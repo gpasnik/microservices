@@ -8,12 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Api.Controllers
 {
+    /// <summary>
+    /// Account endpoint
+    /// </summary>
     [Route("api/account")]
     public class AccountController : ControllerBase
     {
         private readonly IJwtTokenService _jwtHandler;
         private readonly IUserServiceClient _userService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public AccountController(
             IJwtTokenService jwtHandler,
             IUserServiceClient userService)
@@ -22,6 +28,10 @@ namespace GP.Microservices.Api.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Get signed-in user account
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> Get()
@@ -35,6 +45,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Sign in
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("sign-in")]
         public async Task<IActionResult> SignIn([FromBody] SignIn request)
         {
@@ -61,6 +76,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// Sign up
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("sign-up")]
         public async Task<IActionResult> SignUp([FromBody] SignUp request)
         {
@@ -85,6 +105,10 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result.Username);
         }
         
+        /// <summary>
+        /// Delete signed-in user account
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("me")]
         public async Task<IActionResult> Delete()

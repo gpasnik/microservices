@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using Autofac;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace GP.Microservices.Api
 {
@@ -41,7 +43,12 @@ namespace GP.Microservices.Api
             services.AddMvc()
                 .AddControllersAsServices();
             services.AddAutofac();
-            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1.0", new Info { Title = "Gateway API", Version = "v1.0" });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+            });
+
             services.AddJwtAuthentication(Configuration);
 
             services.Configure<JwtSettings>(Configuration.GetSection("Jwt"));
@@ -75,9 +82,6 @@ namespace GP.Microservices.Api
                 .As<IBus>();
 
             builder.RegisterType<JwtTokenService>().AsImplementedInterfaces().SingleInstance();
-            //builder.RegisterType<UserServiceClient>().AsImplementedInterfaces();
-            //builder.RegisterType<RemarkServiceClient>().AsImplementedInterfaces();
-            //builder.RegisterType<StorageServiceClient>().AsImplementedInterfaces();
 
             ApplicationContainer = builder.Build();
 
@@ -92,6 +96,12 @@ namespace GP.Microservices.Api
                     .AllowAnyMethod()
                     .AllowCredentials());
             app.UseMiddleware<ErrorWrappingMiddleware>();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Gateway API");
+                c.DocExpansion(DocExpansion.None);
+            });
             app.UseAuthentication();
             app.UseMvc();
 

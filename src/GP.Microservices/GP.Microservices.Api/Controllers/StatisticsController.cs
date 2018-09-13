@@ -2,10 +2,15 @@
 
 namespace GP.Microservices.Api.Controllers
 {
+    [Route("api/statistics")]
     public class StatisticsController : Controller
     {
-        // GET
-        public IActionResult Index()
+        /// <summary>
+        /// Browse statistics
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Browse()
         {
             return NoContent();
         }

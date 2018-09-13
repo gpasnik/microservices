@@ -6,12 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Api.Controllers
 {
+    /// <summary>
+    /// User endpoint
+    /// </summary>
     [Route("api/users")]
     public class UsersController : Controller
     {
         private readonly IUserServiceClient _userService;
         private readonly IStorageServiceClient _storageService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UsersController(
             IUserServiceClient userService,
             IStorageServiceClient storageService)
@@ -20,6 +26,9 @@ namespace GP.Microservices.Api.Controllers
             _storageService = storageService;
         }
 
+        /// <summary>
+        /// Browse users
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> Browse()
         {
@@ -31,6 +40,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get user
+        /// </summary>
+        /// <param name="username">Username of the user to get</param>
+        /// <returns></returns>
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
@@ -41,7 +55,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{username}")]
+        /// <summary>
+        /// Block user
+        /// </summary>
+        /// <param name="username">Username of the user to block</param>
+        /// <returns></returns>
+        [HttpPut("{username}/block")]
         public async Task<IActionResult> Block(string username)
         {
             var command = new BlockUser
@@ -56,7 +75,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{username}")]
+        /// <summary>
+        /// Unblock user
+        /// </summary>
+        /// <param name="username">Username of the user to unblock</param>
+        /// <returns></returns>
+        [HttpPut("{username}/unblock")]
         public async Task<IActionResult> Unblock(string username)
         {
             var command = new UnblockUser

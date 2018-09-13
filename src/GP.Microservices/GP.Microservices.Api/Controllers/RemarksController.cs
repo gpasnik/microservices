@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Api.Controllers
 {
+    /// <summary>
+    /// Remark resource endpoints
+    /// </summary>
     [Authorize]
     [Route("api/remarks")]
     public class RemarksController : ControllerBase
@@ -25,6 +28,10 @@ namespace GP.Microservices.Api.Controllers
             _storageService = storageService;
         }
 
+        /// <summary>
+        /// Browse remarks
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Browse()
         {
@@ -45,6 +52,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get remark details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -55,6 +67,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Create remark
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRemarkRequest request)
         {
@@ -82,6 +99,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Resolve remark
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id:guid}/resolve")]
         public async Task<IActionResult> Resolve(Guid id)
         {
@@ -100,6 +122,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Cancel remark
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id:guid}/cancel")]
         public async Task<IActionResult> Cancel(Guid id)
         {
@@ -118,6 +145,11 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Delete remark
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -145,6 +177,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Add image
+        /// </summary>
+        /// <param name="remarkId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("{remarkId:guid}/images")]
         public async Task<IActionResult> AddImage(Guid remarkId, [FromBody] AddImageRequest request)
         {
@@ -172,6 +210,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Remove image
+        /// </summary>
+        /// <param name="remarkId"></param>
+        /// <param name="imageId"></param>
+        /// <returns></returns>
         [HttpDelete("{remarkId:guid}/images/{imageId:guid}")]
         public async Task<IActionResult> RemoveImage(Guid remarkId, Guid imageId)
         {
@@ -191,6 +235,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Add comment
+        /// </summary>
+        /// <param name="remarkId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("{remarkId:guid}/comments")]
         public async Task<IActionResult> AddComment(Guid remarkId, [FromBody] AddCommentRequest request)
         {
@@ -211,6 +261,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Remove comment
+        /// </summary>
+        /// <param name="remarkId"></param>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
         [HttpPost("{remarkId:guid}/comments/{commentId:guid}")]
         public async Task<IActionResult> RemoveComment(Guid remarkId, Guid commentId)
         {
@@ -230,6 +286,12 @@ namespace GP.Microservices.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Add activity
+        /// </summary>
+        /// <param name="remarkId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("{remarkId:guid}/activities")]
         public async Task<IActionResult> AddActivity(Guid remarkId, [FromBody] AddActivityRequest request)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace GP.Microservices.Users
 {
@@ -37,8 +39,16 @@ namespace GP.Microservices.Users
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddCors();
+            services.AddMvc()
+                .AddControllersAsServices();
             services.AddAutofac();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1.0", new Info { Title = "Users API", Version = "v1.0" });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+            });
+
             services.AddJwtAuthentication(Configuration);
 
             var connection = Configuration.GetConnectionString("UsersDb");
@@ -125,12 +135,18 @@ namespace GP.Microservices.Users
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             IApplicationLifetime appLifetime)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+            app.UseCors(o => o.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
             app.UseMiddleware<ErrorWrappingMiddleware>();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Users API");
+                c.DocExpansion(DocExpansion.None);
+            });
+            app.UseAuthentication();
             app.UseMvc();
 
             var context = ApplicationContainer.Resolve<UsersContext>();
