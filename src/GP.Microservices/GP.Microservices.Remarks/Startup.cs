@@ -3,10 +3,15 @@ using System.IO;
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using GP.Microservices.Common;
 using GP.Microservices.Common.Authentication;
 using GP.Microservices.Common.Middlewares;
+using GP.Microservices.Remarks.Data;
+using GP.Microservices.Remarks.Domain.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -44,9 +49,36 @@ namespace GP.Microservices.Remarks
 
             services.AddJwtAuthentication(Configuration);
 
+            services.AddDbContext<RemarksContext>(o => o.UseSqlServer(Configuration.GetConnectionString("RemarksDb")));
+
             // Create the container builder.
             var builder = new ContainerBuilder();
             builder.Populate(services);
+
+            builder.RegisterConsumers(Assembly.GetExecutingAssembly());
+            builder.RegisterType<RemarkService>().AsImplementedInterfaces();
+            builder.RegisterType<ActivityService>().AsImplementedInterfaces();
+            builder.RegisterType<CategoryService>().AsImplementedInterfaces();
+
+            builder.Register(context =>
+                {
+                    var config = new RabbitMqConfiguration();
+                    Configuration.Bind("RabbitMq", config);
+                    var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
+                    {
+                        var host = cfg.Host(new Uri(config.Host), h =>
+                        {
+                            h.Username(config.User);
+                            h.Password(config.Password);
+                            h.Heartbeat(5);
+                        });
+                    });
+
+                    return busControl;
+                })
+                .SingleInstance()
+                .As<IBusControl>()
+                .As<IBus>();
 
 
             ApplicationContainer = builder.Build();
@@ -71,6 +103,12 @@ namespace GP.Microservices.Remarks
             });
             app.UseAuthentication();
             app.UseMvc();
+
+            var context = ApplicationContainer.Resolve<RemarksContext>();
+            if (context.Database.EnsureCreated() == false)
+            {
+                Console.WriteLine("creating db");
+            }
 
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }

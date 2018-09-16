@@ -11,7 +11,7 @@ namespace GP.Microservices.Remarks.Domain.Models
 
         public string Text { get; set; }
 
-        public string Status { get; set; }
+        public CommentStatus Status { get; set; }
 
         public DateTime DateCreated { get; set; }
 
@@ -21,5 +21,20 @@ namespace GP.Microservices.Remarks.Domain.Models
 
         [ForeignKey("RemarkId")]
         public virtual Remark Remark { get; set; }
+
+        public Comment()
+        {
+            
+        }
+
+        public Comment(string text, Guid remarkId, Guid authorId)
+        {
+            Id = Guid.NewGuid();
+            Text = text;
+            Status = CommentStatus.Active;
+            DateCreated = DateTime.UtcNow;
+            RemarkId = remarkId;
+            AuthorId = authorId;
+        }
     }
 }

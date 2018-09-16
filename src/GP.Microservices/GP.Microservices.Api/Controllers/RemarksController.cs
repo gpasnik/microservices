@@ -250,7 +250,6 @@ namespace GP.Microservices.Api.Controllers
             {
                 RemarkId = remarkId,
                 Text = request.Text,
-                Status = CommentStatus.Active,
                 UserId = userId
             };
 

@@ -9,7 +9,5 @@ namespace GP.Microservices.Common.Messages.Remarks.Commands
         public Guid UserId { get; set; }
 
         public string Text { get; set; }
-
-        public CommentStatus Status { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GP.Microservices.Common.Messages.Remarks.Queries;
 using GP.Microservices.Common.Messages.Users.Commands;
 using GP.Microservices.Users.Domain.Models;
 
@@ -7,6 +9,8 @@ namespace GP.Microservices.Users.Domain.Services
 {
     public interface IUserService
     {
+        Task<IEnumerable<User>> BrowseAsync(BrowseUsers query);
+            
         Task<User> GetAsync(string username);
 
         Task<User> GetAsync(Guid id);

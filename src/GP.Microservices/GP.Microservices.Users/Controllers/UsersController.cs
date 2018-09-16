@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using GP.Microservices.Common.Dto;
+using GP.Microservices.Common.Messages.Remarks.Queries;
 using GP.Microservices.Common.Messages.Users.Commands;
 using GP.Microservices.Users.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Users.Controllers
 {
+    /// <summary>
+    /// User resource endpoints
+    /// </summary>
     [Route("api/users")]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
 
+        /// <inheritdoc />
         public UsersController(IUserService userService)
         {
             _userService = userService;
@@ -23,7 +30,22 @@ namespace GP.Microservices.Users.Controllers
         [HttpGet]
         public async Task<IActionResult> Browse()
         {
-            throw new NotImplementedException();
+            var query = new BrowseUsers();
+            var users = await _userService.BrowseAsync(query);
+
+            var result = users
+                .Select(x => new UserDto
+                {
+                    Id = x.Id,
+                    Username = x.Username,
+                    Email = x.Email,
+                    Name = x.Name,
+                    Lastname = x.Lastname,
+                    Status = x.Status.ToString()
+                })
+                .ToList();
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -34,9 +56,18 @@ namespace GP.Microservices.Users.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
-            var result = await _userService.GetAsync(username);
+            var user = await _userService.GetAsync(username);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
 
-            return Ok(result);
+            return Ok(dto);
         }
 
         /// <summary>
@@ -47,10 +78,19 @@ namespace GP.Microservices.Users.Controllers
         [HttpPost("{username}")]
         public async Task<IActionResult> Create([FromBody] RegisterUser command)
         {
-            var result = await _userService.RegisterAsync(command.Username, command.Password, command.Email,
+            var user = await _userService.RegisterAsync(command.Username, command.Password, command.Email,
                 command.Name, command.LastName);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
 
-            return Ok(result);
+            return Ok(dto);
         }
 
         /// <summary>
@@ -61,9 +101,18 @@ namespace GP.Microservices.Users.Controllers
         [HttpDelete("{username}")]
         public async Task<IActionResult> Delete(string username)
         {
-            var result = await _userService.DeleteAsync(username);
+            var user = await _userService.DeleteAsync(username);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
 
-            return Ok(result);
+            return Ok(dto);
         }
 
         /// <summary>
@@ -75,9 +124,18 @@ namespace GP.Microservices.Users.Controllers
         [HttpPost("{username}/authorize")]
         public async Task<IActionResult> Authorize(string username, [FromBody] AuthorizeUser command)
         {
-            var result = await _userService.AuthorizeAsync(command);
+            var user = await _userService.AuthorizeAsync(command);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
 
-            return Ok(result);
+            return Ok(dto);
         }
 
         /// <summary>
@@ -88,9 +146,18 @@ namespace GP.Microservices.Users.Controllers
         [HttpPut("{username}/block")]
         public async Task<IActionResult> Block(string username)
         {
-            var result = await _userService.BlockAsync(username);
+            var user = await _userService.BlockAsync(username);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
 
-            return Ok(result);
+            return Ok(dto);
         }
 
         /// <summary>
@@ -101,9 +168,18 @@ namespace GP.Microservices.Users.Controllers
         [HttpPut("{username}/unblock")]
         public async Task<IActionResult> Unblock(string username)
         {
-            var result = await _userService.UnblockAsync(username);
+            var user = await _userService.UnblockAsync(username);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
 
-            return Ok(result);
+            return Ok(dto);
         }
     }
 }

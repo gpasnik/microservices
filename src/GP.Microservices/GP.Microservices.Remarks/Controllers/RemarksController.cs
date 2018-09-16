@@ -54,7 +54,7 @@ namespace GP.Microservices.Remarks.Controllers
                     Author = x.AuthorId,
                     CategoryId = x.CategoryId,
                     CategoryName = categories.FirstOrDefault(y => y.Id == x.CategoryId)?.Name,
-                    Status = x.Status
+                    Status = x.Status.ToString()
                 })
                 .ToList();
 
@@ -101,7 +101,7 @@ namespace GP.Microservices.Remarks.Controllers
                 Author = remark.AuthorId,
                 CategoryId = remark.CategoryId,
                 CategoryName = category.Name,
-                Status = remark.Status,
+                Status = remark.Status.ToString(),
                 Activities = activities?
                     .Select(x => new ActivityDto
                     {
@@ -114,7 +114,7 @@ namespace GP.Microservices.Remarks.Controllers
                     {
                         Id = x.Id,
                         AuthorId = x.AuthorId,
-                        Status = x.Status,
+                        Status = x.Status.ToString(),
                         Text = x.Text
                     })
                     .ToList(),
@@ -124,7 +124,6 @@ namespace GP.Microservices.Remarks.Controllers
                         Id = x.Id,
                         Name = x.Name,
                         Url = x.Url,
-                        Order = x.Order
                     })
                     .ToList()
             };
@@ -234,7 +233,7 @@ namespace GP.Microservices.Remarks.Controllers
                 {
                     Id = x.Id,
                     AuthorId = x.AuthorId,
-                    Status = x.Status,
+                    Status = x.Status.ToString(),
                     Text = x.Text
                 })
                 .ToList();
@@ -254,7 +253,7 @@ namespace GP.Microservices.Remarks.Controllers
             {
                 Id = comment.Id,
                 AuthorId = comment.AuthorId,
-                Status = comment.Status,
+                Status = comment.Status.ToString(),
                 Text = comment.Text
             };
 
@@ -278,7 +277,7 @@ namespace GP.Microservices.Remarks.Controllers
             {
                 Id = comment.Id,
                 AuthorId = comment.AuthorId,
-                Status = comment.Status,
+                Status = comment.Status.ToString(),
                 Text = comment.Text
             };
 
@@ -299,7 +298,6 @@ namespace GP.Microservices.Remarks.Controllers
                     Id = x.Id,
                     Name = x.Name,
                     Url = x.Url,
-                    Order = x.Order
                 })
                 .ToList();
 
@@ -319,7 +317,6 @@ namespace GP.Microservices.Remarks.Controllers
                 Id = images.Id,
                 Name = images.Name,
                 Url = images.Url,
-                Order = images.Order
             };
 
             return Ok(dto);
@@ -343,7 +340,6 @@ namespace GP.Microservices.Remarks.Controllers
                 Id = images.Id,
                 Name = images.Name,
                 Url = images.Url,
-                Order = images.Order
             };
 
             return Ok(dto);

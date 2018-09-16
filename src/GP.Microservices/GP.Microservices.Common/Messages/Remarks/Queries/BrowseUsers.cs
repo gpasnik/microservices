@@ -1,6 +1,6 @@
 ﻿namespace GP.Microservices.Common.Messages.Remarks.Queries
 {
-    public class BrowseUsers
+    public class BrowseUsers : PagedQueryBase
     {
         
     }

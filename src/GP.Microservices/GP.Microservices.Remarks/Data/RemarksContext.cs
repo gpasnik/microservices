@@ -6,6 +6,18 @@ namespace GP.Microservices.Remarks.Data
 {
     public class RemarksContext : DbContext
     {
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Remark> Remarks { get; set; }
+
+        public DbSet<Activity> Activities { get; set; }
+
+        public DbSet<ActivityType> ActivityTypes { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+
         public RemarksContext(DbContextOptions<RemarksContext> options)
             :base(options)
         {
@@ -37,6 +49,24 @@ namespace GP.Microservices.Remarks.Data
                     {
                         Id = Guid.NewGuid(),
                         Name = "Praise"
+                    });
+
+            modelBuilder.Entity<ActivityType>()
+                .HasData(
+                    new ActivityType
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Cleaning"
+                    },
+                    new ActivityType
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Fixing"
+                    },
+                    new ActivityType
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Activity"
                     });
         }
     }

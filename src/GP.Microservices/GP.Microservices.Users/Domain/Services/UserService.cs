@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GP.Microservices.Common.Exceptions;
+using GP.Microservices.Common.Messages.Remarks.Queries;
 using GP.Microservices.Common.Messages.Users.Commands;
 using GP.Microservices.Common.ServiceClients;
 using GP.Microservices.Users.Data;
@@ -16,6 +18,11 @@ namespace GP.Microservices.Users.Domain.Services
         public UserService(UsersContext context)
         {
             _context = context;
+        }
+
+        public async Task<IEnumerable<User>> BrowseAsync(BrowseUsers query)
+        {
+            return await _context.Users.ToListAsync();
         }
 
         public async Task<User> GetAsync(string username)

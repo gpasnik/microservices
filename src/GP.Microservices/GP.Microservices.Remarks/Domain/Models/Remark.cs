@@ -19,7 +19,7 @@ namespace GP.Microservices.Remarks.Domain.Models
 
         public double Longitude { get; set; }
 
-        public string Status { get; set; }
+        public RemarkStatus Status { get; set; }
 
         public DateTime DateCreated { get; set; }
 
@@ -31,5 +31,23 @@ namespace GP.Microservices.Remarks.Domain.Models
 
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
+
+        public Remark()
+        {
+            
+        }
+
+        public Remark(string name, string description, double latitude, double longitude, Guid categoryId, Guid authorId)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Description = description;
+            Latitude = latitude;
+            Longitude = longitude;
+            CategoryId = categoryId;
+            AuthorId = authorId;
+            DateCreated = DateTime.UtcNow;
+            Status = RemarkStatus.Reported;
+        }
     }
 }

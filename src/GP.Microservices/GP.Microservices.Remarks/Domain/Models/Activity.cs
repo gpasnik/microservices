@@ -22,5 +22,19 @@ namespace GP.Microservices.Remarks.Domain.Models
 
         [ForeignKey("TypeId")]
         public virtual ActivityType Type { get; set; }
+
+        public Activity()
+        {
+            
+        }
+
+        public Activity(Guid remarkId, Guid typeId, Guid authorId)
+        {
+            Id = Guid.NewGuid();
+            Date = DateTime.UtcNow;
+            RemarkId = remarkId;
+            TypeId = typeId;
+            AuthorId = authorId;
+        }
     }
 }
