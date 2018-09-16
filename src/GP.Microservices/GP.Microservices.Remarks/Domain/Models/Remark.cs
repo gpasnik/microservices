@@ -15,7 +15,9 @@ namespace GP.Microservices.Remarks.Domain.Models
 
         public string Description { get; set; }
 
-        public Geography Coordinates { get; set; }
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
 
         public string Status { get; set; }
 

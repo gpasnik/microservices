@@ -5,7 +5,7 @@ using GP.Microservices.Remarks.Domain.Models;
 
 namespace GP.Microservices.Remarks.Domain.Services
 {
-    public interface IActivitiesService
+    public interface IActivityService
     {
         Task<IEnumerable<ActivityType>> GetAsync();
 
