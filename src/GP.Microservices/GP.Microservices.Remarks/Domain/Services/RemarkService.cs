@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GP.Microservices.Common.Messages.Remarks.Commands;
+using GP.Microservices.Common.Messages.Remarks.Events;
 using GP.Microservices.Common.Messages.Remarks.Queries;
 using GP.Microservices.Remarks.Data;
 using GP.Microservices.Remarks.Domain.Models;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using CommentStatus = GP.Microservices.Remarks.Domain.Models.CommentStatus;
+using RemarkCanceled = GP.Microservices.Common.Messages.Remarks.Events.RemarkCanceled;
 
 namespace GP.Microservices.Remarks.Domain.Services
 {
     public class RemarkService : IRemarkService
     {
         private readonly RemarksContext _context;
+        private readonly IBus _bus;
 
-        public RemarkService(RemarksContext context)
+        public RemarkService(
+            RemarksContext context,
+            IBus bus)
         {
             _context = context;
+            _bus = bus;
         }
 
         public async Task<IEnumerable<Remark>> BrowseAsync(BrowseRemarks query)
@@ -42,6 +49,11 @@ namespace GP.Microservices.Remarks.Domain.Services
             var entry = await _context.Remarks.AddAsync(remark);
             await _context.SaveChangesAsync();
 
+            await _bus.Publish(new RemarkCreated
+            {
+                RemarkId = entry.Entity.Id
+            });
+
             return entry.Entity;
         }
 
@@ -51,6 +63,11 @@ namespace GP.Microservices.Remarks.Domain.Services
             remark.Status = RemarkStatus.Resolved;
 
             await _context.SaveChangesAsync();
+
+            await _bus.Publish(new RemarkResolved
+            {
+                RemarkId = remark.Id
+            });
 
             return remark;
         }
@@ -62,6 +79,11 @@ namespace GP.Microservices.Remarks.Domain.Services
 
             await _context.SaveChangesAsync();
 
+            await _bus.Publish(new RemarkCanceled
+            {
+                RemarkId = remark.Id
+            });
+
             return remark;
         }
 
@@ -71,6 +93,11 @@ namespace GP.Microservices.Remarks.Domain.Services
             remark.Status = RemarkStatus.Deleted;
 
             await _context.SaveChangesAsync();
+
+            await _bus.Publish(new RemarkDeleted
+            {
+                RemarkId = remark.Id
+            });
 
             return remark;
         }
@@ -91,6 +118,12 @@ namespace GP.Microservices.Remarks.Domain.Services
 
             var entry = await _context.Activities.AddAsync(activity);
             await _context.SaveChangesAsync();
+
+            await _bus.Publish(new ActivityAdded
+            {
+                RemarkId = entry.Entity.RemarkId,
+                ActivityId = entry.Entity.Id
+            });
 
             return entry.Entity;
         }
@@ -118,6 +151,12 @@ namespace GP.Microservices.Remarks.Domain.Services
             var entry = await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
 
+            await _bus.Publish(new CommentAdded
+            {
+                RemarkId = entry.Entity.RemarkId,
+                CommentId = entry.Entity.Id
+            });
+
             return entry.Entity;
         }
 
@@ -127,6 +166,12 @@ namespace GP.Microservices.Remarks.Domain.Services
 
             comment.Status = CommentStatus.Deleted;
             await _context.SaveChangesAsync();
+
+            await _bus.Publish(new CommentAdded
+            {
+                RemarkId = comment.RemarkId,
+                CommentId = comment.Id
+            });
 
             return comment;
         }
@@ -148,6 +193,12 @@ namespace GP.Microservices.Remarks.Domain.Services
             var entry = await _context.Images.AddAsync(image);
             await _context.SaveChangesAsync();
 
+            await _bus.Publish(new ImageAdded
+            {
+                RemarkId = entry.Entity.RemarkId,
+                ImageId = entry.Entity.Id
+            });
+
             return entry.Entity;
         }
 
@@ -156,6 +207,12 @@ namespace GP.Microservices.Remarks.Domain.Services
             var image = await _context.Images.SingleOrDefaultAsync(x => x.Id == command.ImageId);
             var entry = _context.Remove(image);
             await _context.SaveChangesAsync();
+
+            await _bus.Publish(new ImageRemoved
+            {
+                RemarkId = entry.Entity.RemarkId,
+                ImageId = entry.Entity.Id
+            });
 
             return entry.Entity;
         }

@@ -10,6 +10,7 @@ using GP.Microservices.Common.Messages.Users.Events;
 using GP.Microservices.Common.Middlewares;
 using GP.Microservices.Storage.Domain.Repositories;
 using GP.Microservices.Storage.Handlers;
+using GP.Microservices.Storage.Mongo;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,13 +46,18 @@ namespace GP.Microservices.Storage
 
             services.AddJwtAuthentication(Configuration);
 
+            services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDb"));
+
             // Create the container builder.
             var builder = new ContainerBuilder();
             builder.Populate(services);
 
+            builder.RegisterModule<MongoModule>();
+
             builder.RegisterType<RemarkRepository>().AsImplementedInterfaces();
             builder.RegisterType<UserRepository>().AsImplementedInterfaces();
 
+            builder.RegisterConsumers(Assembly.GetExecutingAssembly());
             builder.Register(context =>
                 {
                     var config = new RabbitMqConfiguration();

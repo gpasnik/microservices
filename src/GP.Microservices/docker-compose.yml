@@ -78,6 +78,9 @@ services:
     links:
       - "rabbitmq:rabbit"
       - "mongo"
+      - "gp.microservices.users:users"
+      - "gp.microservices.remarks:remarks"
+      - "gp.microservices.statistics:statistics"
     depends_on:
       - rabbitmq
       - sqlserver
