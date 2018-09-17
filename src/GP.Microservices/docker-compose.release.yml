@@ -1,3 +1,32 @@
-version: '3'
+version: '3.4'
 
+services:
+  gp.microservices.api:
+    image: gpasnik/microservices-api
+    build:
+      context: GP.Microservices.Api
+      dockerfile: ./Dockerfile.docker
 
+  gp.microservices.users:
+    image: gpasnik/microservices-users
+    build:
+      context: GP.Microservices.Users
+      dockerfile: ./Dockerfile.docker
+
+  gp.microservices.remarks:
+    image: gpasnik/microservices-remarks
+    build:
+      context: GP.Microservices.Remarks
+      dockerfile: ./Dockerfile.docker
+
+  gp.microservices.statistics:
+    image: gpasnik/microservices-statistics
+    build:
+      context: GP.Microservices.Statistics
+      dockerfile: ./Dockerfile.docker
+
+  gp.microservices.storage:
+    image: gpasnik/microservices-storage
+    build:
+      context: GP.Microservices.Storage
+      dockerfile: ./Dockerfile.docker

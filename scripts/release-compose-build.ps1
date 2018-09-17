@@ -1,1 +1,1 @@
-docker-compose -f "../src/GP.Microservices/docker-compose.yml" build
+docker-compose -f "../src/GP.Microservices/docker-compose.release.yml" build
