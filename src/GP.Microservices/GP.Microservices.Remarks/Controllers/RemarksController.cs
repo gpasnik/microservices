@@ -244,7 +244,7 @@ namespace GP.Microservices.Remarks.Controllers
         /// <summary>
         /// Add comments
         /// </summary>
-        [HttpGet("{id:guid}/comments")]
+        [HttpPost("{id:guid}/comments")]
         public async Task<IActionResult> AddComment(Guid id, [FromBody] AddComment command)
         {
             var comment = await _remarkService.AddCommentAsync(command);

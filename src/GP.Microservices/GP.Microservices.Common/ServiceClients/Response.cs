@@ -25,7 +25,9 @@ namespace GP.Microservices.Common.ServiceClients
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode == false)
             {
-                var error = JsonConvert.DeserializeObject<ServiceError>(content);
+                var error = string.IsNullOrWhiteSpace(content)
+                 ? new ServiceError(response.ReasonPhrase, (int) response.StatusCode)
+                 : JsonConvert.DeserializeObject<ServiceError>(content);
 
                 return new Response<T>(default(T), error);
             }

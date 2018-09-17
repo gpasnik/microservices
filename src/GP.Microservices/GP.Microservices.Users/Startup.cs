@@ -155,6 +155,9 @@ namespace GP.Microservices.Users
                 Console.WriteLine("creating db");
             }
 
+            var busControl = ApplicationContainer.Resolve<IBusControl>();
+            busControl.Start();
+
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
     }

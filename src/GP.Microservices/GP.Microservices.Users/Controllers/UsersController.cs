@@ -49,6 +49,29 @@ namespace GP.Microservices.Users.Controllers
         }
 
         /// <summary>
+        /// Create user
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] RegisterUser command)
+        {
+            var user = await _userService.RegisterAsync(command.Username, command.Password, command.Email,
+                command.Name, command.LastName);
+            var dto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Name = user.Name,
+                Lastname = user.Lastname,
+                Status = user.Status.ToString()
+            };
+
+            return Ok(dto);
+        }
+
+        /// <summary>
         /// Get user account
         /// </summary>
         /// <param name="username"></param>
@@ -71,15 +94,14 @@ namespace GP.Microservices.Users.Controllers
         }
 
         /// <summary>
-        /// Create user
+        /// Get user account
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost("{username}")]
-        public async Task<IActionResult> Create([FromBody] RegisterUser command)
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var user = await _userService.RegisterAsync(command.Username, command.Password, command.Email,
-                command.Name, command.LastName);
+            var user = await _userService.GetAsync(id);
             var dto = new UserDto
             {
                 Id = user.Id,

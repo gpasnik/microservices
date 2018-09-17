@@ -47,6 +47,7 @@ namespace GP.Microservices.Api
             {
                 c.SwaggerDoc("v1.0", new Info { Title = "Gateway API", Version = "v1.0" });
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                c.OperationFilter<AddRequiredHeaderParameter>();
             });
 
             services.AddJwtAuthentication(Configuration);

@@ -8,6 +8,7 @@ using GP.Microservices.Common.Authentication;
 using GP.Microservices.Common.Messages.Remarks.Events;
 using GP.Microservices.Common.Messages.Users.Events;
 using GP.Microservices.Common.Middlewares;
+using GP.Microservices.Common.ServiceClients;
 using GP.Microservices.Storage.Domain.Repositories;
 using GP.Microservices.Storage.Handlers;
 using GP.Microservices.Storage.Mongo;
@@ -47,6 +48,9 @@ namespace GP.Microservices.Storage
             services.AddJwtAuthentication(Configuration);
 
             services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDb"));
+
+            services.AddHttpClient<IUserServiceClient, UserServiceClient>();
+            services.AddHttpClient<IRemarkServiceClient, RemarkServiceClient>();
 
             // Create the container builder.
             var builder = new ContainerBuilder();
@@ -116,6 +120,9 @@ namespace GP.Microservices.Storage
             });
             app.UseAuthentication();
             app.UseMvc();
+
+            var busControl = ApplicationContainer.Resolve<IBusControl>();
+            busControl.Start();
 
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }

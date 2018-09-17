@@ -25,8 +25,7 @@ namespace GP.Microservices.Common.Middlewares
             catch (Exception ex)
             {
                 ServiceError error;
-                var serviceException = ex as ServiceException;
-                if (serviceException != null)
+                if (ex is ServiceException serviceException)
                 {
                     context.Response.StatusCode = serviceException.ServiceError.HttpStatusCode;
                     error = serviceException.ServiceError;

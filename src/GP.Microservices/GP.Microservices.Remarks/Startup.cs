@@ -110,6 +110,9 @@ namespace GP.Microservices.Remarks
                 Console.WriteLine("creating db");
             }
 
+            var busControl = ApplicationContainer.Resolve<IBusControl>();
+            busControl.Start();
+
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
     }

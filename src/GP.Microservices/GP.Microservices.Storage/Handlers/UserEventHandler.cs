@@ -60,15 +60,15 @@ namespace GP.Microservices.Storage.Handlers
             await UpdateStorageEntity(context.Message.Id);
         }
 
-        private async Task<UserDto> GetRemarkAsync(Guid id)
+        private async Task<UserDto> GetUserAsync(Guid id)
             => await _serviceClient
                 .GetUserAsync(id)
                 .OrFailAsync();
 
-        private async Task UpdateStorageEntity(Guid remarkId)
+        private async Task UpdateStorageEntity(Guid userId)
         {
-            var remark = await GetRemarkAsync(remarkId);
-            await _userRepository.UpsertAsync(remark);
+            var user = await GetUserAsync(userId);
+            await _userRepository.UpsertAsync(user);
         }
     }
 }
