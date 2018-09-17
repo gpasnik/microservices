@@ -10,11 +10,18 @@ namespace GP.Microservices.Storage.Controllers
     public class RemarksController : Controller
     {
         private readonly IRemarkRepository _remarkRepository;
+        private readonly IRemarkCategoryRepository _categoryRepository;
+        private readonly IActivityTypeRepository _activityTypeRepository;
 
         /// <inheritdoc />
-        public RemarksController(IRemarkRepository remarkRepository)
+        public RemarksController(
+            IRemarkRepository remarkRepository,
+            IRemarkCategoryRepository categoryRepository,
+            IActivityTypeRepository activityTypeRepository)
         {
             _remarkRepository = remarkRepository;
+            _categoryRepository = categoryRepository;
+            _activityTypeRepository = activityTypeRepository;
         }
 
         /// <summary>
@@ -38,6 +45,28 @@ namespace GP.Microservices.Storage.Controllers
             var remark = await _remarkRepository.GetAsync(id);
 
             return Ok(remark);
+        }
+
+        /// <summary>
+        /// Get remark categories
+        /// </summary>
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await _categoryRepository.GetAsync();
+
+            return Ok(categories);
+        }
+
+        /// <summary>
+        /// Get remark categories
+        /// </summary>
+        [HttpGet("activities")]
+        public async Task<IActionResult> GetActivities()
+        {
+            var categories = await _activityTypeRepository.GetAsync();
+
+            return Ok(categories);
         }
     }
 }

@@ -10,9 +10,15 @@ namespace GP.Microservices.Common.ServiceClients
     {
         Task<Response<RemarkDto>> GetRemarkAsync(Guid id);
 
+        Task<Response<IEnumerable<RemarkCategoryDto>>> GetCategoriesAsync();
+
+        Task<Response<IEnumerable<ActivityTypeDto>>> GetActivitiesAsync();
+
         Task<Response<IEnumerable<RemarkDto>>> BrowseRemarksAsync(BrowseRemarks query);
 
         Task<Response<UserDto>> GetUserAsync(string username);
+
+        Task<Response<UserDto>> GetUserAsync(Guid id);
 
         Task<Response<IEnumerable<UserDto>>> BrowseUsersAsync(BrowseUsers query);
 

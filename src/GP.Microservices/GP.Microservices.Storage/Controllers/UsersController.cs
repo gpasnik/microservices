@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GP.Microservices.Storage.Controllers
 {
+    /// <summary>
+    /// User resource endpoints
+    /// </summary>
     [Route("api/users")]
     public class UsersController : Controller
     {
@@ -36,9 +39,20 @@ namespace GP.Microservices.Storage.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var remark = await _userRepository.GetAsync(id);
+            var user = await _userRepository.GetAsync(id);
 
-            return Ok(remark);
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// Get user
+        /// </summary>
+        [HttpGet("{username}")]
+        public async Task<IActionResult> Get(string username)
+        {
+            var user = await _userRepository.GetAsync(username);
+
+            return Ok(user);
         }
     }
 }

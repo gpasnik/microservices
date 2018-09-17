@@ -16,16 +16,19 @@ namespace GP.Microservices.Api.Controllers
     {
         private readonly IJwtTokenService _jwtHandler;
         private readonly IUserServiceClient _userService;
+        private readonly IStorageServiceClient _storageService;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AccountController(
             IJwtTokenService jwtHandler,
-            IUserServiceClient userService)
+            IUserServiceClient userService,
+            IStorageServiceClient storageService)
         {
             _jwtHandler = jwtHandler;
             _userService = userService;
+            _storageService = storageService;
         }
 
         /// <summary>
@@ -36,10 +39,10 @@ namespace GP.Microservices.Api.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> Get()
         {
-            var username = HttpContext.GetUsername();
+            var userId = HttpContext.GetUserId();
 
-            var result = await _userService
-                .GetUserAsync(username)
+            var result = await _storageService
+                .GetUserAsync(userId)
                 .OrFailAsync();
 
             return Ok(result);

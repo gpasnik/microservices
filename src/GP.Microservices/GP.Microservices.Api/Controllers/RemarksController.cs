@@ -20,6 +20,7 @@ namespace GP.Microservices.Api.Controllers
         private readonly IRemarkServiceClient _remarkService;
         private readonly IStorageServiceClient _storageService;
 
+        /// <inheritdoc />
         public RemarksController(
             IRemarkServiceClient remarkService,
             IStorageServiceClient storageService)
@@ -35,8 +36,6 @@ namespace GP.Microservices.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Browse()
         {
-            var username = HttpContext.User.Identity.Name;
-
             var query = new BrowseRemarks
             {
                 Latitude = 19,
@@ -46,22 +45,6 @@ namespace GP.Microservices.Api.Controllers
 
             var result = await _storageService
                 .BrowseRemarksAsync(query)
-                .OrFailAsync();
-
-
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Get remark details
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var result = await _storageService
-                .GetRemarkAsync(id)
                 .OrFailAsync();
 
             return Ok(result);
@@ -94,6 +77,49 @@ namespace GP.Microservices.Api.Controllers
 
             var result = await _remarkService
                 .CreateRemarkAsync(command)
+                .OrFailAsync();
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get remark categories
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var result = await _storageService
+                .GetCategoriesAsync()
+                .OrFailAsync();
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get activity types
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("activities")]
+        public async Task<IActionResult> GetActivities()
+        {
+            var result = await _storageService
+                .GetActivitiesAsync()
+                .OrFailAsync();
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get remark details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var result = await _storageService
+                .GetRemarkAsync(id)
                 .OrFailAsync();
 
             return Ok(result);
