@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Hosting;
 
 namespace GP.Microservices.Storage
 {
@@ -18,8 +10,10 @@ namespace GP.Microservices.Storage
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            new WebHostBuilder()
+                .UseKestrel()
                 .UseStartup<Startup>()
+                .UseIISIntegration()
                 .Build();
     }
 }

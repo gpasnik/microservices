@@ -5,8 +5,12 @@
     <DockerComposeProjectPath>..\GP.Microservices\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DocumentationFile>bin\Debug\netcoreapp2.1\GP.Microservices.Api.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DocumentationFile>bin\Release\netcoreapp2.1\GP.Microservices.Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

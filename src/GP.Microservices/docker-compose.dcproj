@@ -20,6 +20,11 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="kubeconfig-microservices-users.yaml" />
+    <None Include="kubeconfig-microservices-storage.yaml" />
+    <None Include="kubeconfig-microservices-statistics.yaml" />
+    <None Include="kubeconfig-microservices-remarks.yaml" />
+    <None Include="kubeconfig-microservices-api.yaml" />
     <None Include="kubeconfig-gp-namespace.yaml" />
     <None Include="kubeconfig-rolebinding-deployment-manager.yaml" />
     <None Include="kubeconfig-manage-deployments-role.yaml" />
