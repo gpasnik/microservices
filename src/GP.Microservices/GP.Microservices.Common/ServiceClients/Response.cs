@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 
 namespace GP.Microservices.Common.ServiceClients
 {
@@ -20,6 +19,8 @@ namespace GP.Microservices.Common.ServiceClients
         public bool Failure => Error != null;
         public string AggregatedErrors => $"{Error?.Message} {Error?.Code}";
 
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static async Task<Response<T>> CreateAsync(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync();
@@ -28,6 +29,9 @@ namespace GP.Microservices.Common.ServiceClients
                 var error = string.IsNullOrWhiteSpace(content)
                  ? new ServiceError(response.ReasonPhrase, (int) response.StatusCode)
                  : JsonConvert.DeserializeObject<ServiceError>(content);
+
+                Logger.Error($"Can't get response from {response.RequestMessage.RequestUri}, " +
+                              $"reasonPhrase {response.ReasonPhrase}, statusCode: {response.StatusCode}, content: {content}");
 
                 return new Response<T>(default(T), error);
             }

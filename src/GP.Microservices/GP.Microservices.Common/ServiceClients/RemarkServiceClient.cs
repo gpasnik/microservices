@@ -10,53 +10,54 @@ namespace GP.Microservices.Common.ServiceClients
 {
     public class RemarkServiceClient : ServiceClientBase, IRemarkServiceClient
     {
-        public RemarkServiceClient(HttpClient httpClient, IConfiguration config) : base(httpClient, config)
+        public RemarkServiceClient(HttpClient httpClient, IConfiguration config) 
+            : base(httpClient, config)
         {
         }
 
         public async Task<Response<ActivityDto>> AddActivityAsync(AddActivity command)
-            => await PostAsync<ActivityDto>($"remarks/{command.RemarkId}/activities", command);
+            => await PostAsync<ActivityDto>($"api/remarks/{command.RemarkId}/activities", command);
 
         public async Task<Response<CommentDto>> AddCommentAsync(AddComment command)
-            => await PostAsync<CommentDto>($"remarks/{command.RemarkId}/comments", command);
+            => await PostAsync<CommentDto>($"api/remarks/{command.RemarkId}/comments", command);
 
         public async Task<Response<ImageDto>> AddImageAsync(AddImage command)
-            => await PostAsync<ImageDto>($"remarks/{command.RemarkId}/images", command);
+            => await PostAsync<ImageDto>($"api/remarks/{command.RemarkId}/images", command);
 
         public async Task<Response<RemarkDto>> CancelRemarkAsync(CancelRemark command)
-            => await PutAsync<RemarkDto>($"remarks/{command.RemarkId}/cancel", command);
+            => await PutAsync<RemarkDto>($"api/remarks/{command.RemarkId}/cancel", command);
 
         public async Task<Response<RemarkDto>> CreateRemarkAsync(CreateRemark command)
-            => await PostAsync<RemarkDto>("remarks", command);
+            => await PostAsync<RemarkDto>("api/remarks", command);
 
         public async Task<Response<RemarkDto>> DeleteRemarkAsync(DeleteRemark command)
-            => await DeleteAsync<RemarkDto>($"remarks/{command.RemarkId}");
+            => await DeleteAsync<RemarkDto>($"api/remarks/{command.RemarkId}");
 
         public async Task<Response<RemarkDto>> GetRemarkAsync(Guid remarkId)
-            => await GetAsync<RemarkDto>($"remarks/{remarkId}");
+            => await GetAsync<RemarkDto>($"api/remarks/{remarkId}");
 
         public async Task<Response<IEnumerable<ActivityTypeDto>>> GetActivityTypesAsync()
-            => await GetAsync<IEnumerable<ActivityTypeDto>>("activities");
+            => await GetAsync<IEnumerable<ActivityTypeDto>>("api/activities");
 
         public async Task<Response<IEnumerable<ActivityDto>>> GetRemarkAcivitiesAsync(Guid remarkId)
-            => await GetAsync<IEnumerable<ActivityDto>>($"remarks/{remarkId}/activities");
+            => await GetAsync<IEnumerable<ActivityDto>>($"api/remarks/{remarkId}/activities");
 
         public async Task<Response<IEnumerable<RemarkCategoryDto>>> GetRemarkCategoriesAsync()
-            => await GetAsync<IEnumerable<RemarkCategoryDto>>("categories");
+            => await GetAsync<IEnumerable<RemarkCategoryDto>>("api/categories");
 
         public async Task<Response<IEnumerable<CommentDto>>> GetRemarkCommentsAsync(Guid remarkId)
-            => await GetAsync<IEnumerable<CommentDto>>($"remarks/{remarkId}/comments");
+            => await GetAsync<IEnumerable<CommentDto>>($"api/remarks/{remarkId}/comments");
 
         public async Task<Response<IEnumerable<ImageDto>>> GetRemarkImagesAsync(Guid remarkId)
-            => await GetAsync<IEnumerable<ImageDto>>($"remarks/{remarkId}/images");
+            => await GetAsync<IEnumerable<ImageDto>>($"api/remarks/{remarkId}/images");
 
         public async Task<Response<CommentDto>> RemoveCommentAsync(RemoveComment command)
-            => await DeleteAsync<CommentDto>($"remarks/{command.RemarkId}/comments/{command.CommentId}");
+            => await DeleteAsync<CommentDto>($"api/remarks/{command.RemarkId}/comments/{command.CommentId}");
 
         public async Task<Response<ImageDto>> RemoveImageAsync(RemoveImage command)
-            => await DeleteAsync<ImageDto>($"remarks/{command.RemarkId}/images/{command.ImageId}");
+            => await DeleteAsync<ImageDto>($"api/remarks/{command.RemarkId}/images/{command.ImageId}");
 
         public async Task<Response<RemarkDto>> ResolveRemarkAsync(ResolveRemark command)
-            => await PutAsync<RemarkDto>($"remarks/{command.RemarkId}/resolve", command);
+            => await PutAsync<RemarkDto>($"api/remarks/{command.RemarkId}/resolve", command);
     }
 }
