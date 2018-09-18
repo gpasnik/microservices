@@ -18,6 +18,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="App.Metrics" Version="2.1.0" />
+    <PackageReference Include="App.Metrics.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Core" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Health" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Health.Core" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Hosting" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Reporting" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.AspNetCore.Routing" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.Extensions.Middleware" Version="1.2.1" />
+    <PackageReference Include="App.Metrics.Extensions.Mvc" Version="1.2.1" />
+    <PackageReference Include="App.Metrics.Extensions.Reporting.InfluxDB" Version="1.2.0" />
+    <PackageReference Include="App.Metrics.Formatters.Json" Version="2.1.0" />
+    <PackageReference Include="App.Metrics.Health.Core" Version="2.0.0" />
+    <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="2.0.0" />
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
     <PackageReference Include="MassTransit" Version="5.1.4" />

@@ -66,6 +66,7 @@ namespace GP.Microservices.Storage
             var builder = new ContainerBuilder();
             builder.Populate(services);
 
+            builder.Register(ctx => Configuration).As<IConfiguration>();
             builder.RegisterModule<MongoModule>();
 
             builder.RegisterType<RemarkRepository>().AsImplementedInterfaces();

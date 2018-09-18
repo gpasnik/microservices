@@ -1,6 +1,6 @@
 ﻿using System;
+using App.Metrics.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace GP.Microservices.Api
 {
@@ -29,11 +29,6 @@ namespace GP.Microservices.Api
             new WebHostBuilder()
                 .UseKestrel()
                 .UseStartup<Startup>()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
-                })
                 .UseIISIntegration()
                 .Build();
     }

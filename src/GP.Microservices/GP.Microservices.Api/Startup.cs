@@ -2,6 +2,9 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
+using App.Metrics;
+using App.Metrics.Formatters.InfluxDB;
+using App.Metrics.Reporting.InfluxDB;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GP.Microservices.Common;
@@ -50,6 +53,27 @@ namespace GP.Microservices.Api
                 c.OperationFilter<AddRequiredHeaderParameter>();
             });
 
+            var influxOptions = new InfluxDbOptions();
+            Configuration.GetSection("InfluxDb").Bind(influxOptions);
+            var metrics = AppMetrics.CreateDefaultBuilder()
+                .Report.ToInfluxDb(
+                    options =>
+                    {
+                        options.InfluxDb = influxOptions;
+                        options.HttpPolicy.BackoffPeriod = TimeSpan.FromSeconds(30);
+                        options.HttpPolicy.FailuresBeforeBackoff = 5;
+                        options.HttpPolicy.Timeout = TimeSpan.FromSeconds(10);
+                        options.FlushInterval = TimeSpan.FromSeconds(20);
+                        options.MetricsOutputFormatter = new MetricsInfluxDbLineProtocolOutputFormatter();
+                    })
+                .Build();
+
+            metrics.ReportRunner.RunAllAsync();
+
+            services.AddMetrics(metrics);
+            services.AddMetricsReportScheduler();
+            services.AddMetricsTrackingMiddleware();
+            services.AddMetricsEndpoints();
             services.AddJwtAuthentication(Configuration);
 
             services.Configure<JwtSettings>(Configuration.GetSection("Jwt"));
@@ -103,6 +127,8 @@ namespace GP.Microservices.Api
                 c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Gateway API");
                 c.DocExpansion(DocExpansion.None);
             });
+            app.UseMetricsAllMiddleware();
+            app.UseMetricsAllEndpoints();
             app.UseAuthentication();
             app.UseMvc();
 

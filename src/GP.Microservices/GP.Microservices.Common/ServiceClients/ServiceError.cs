@@ -5,6 +5,8 @@ namespace GP.Microservices.Common.ServiceClients
 {
     public class ServiceError
     {
+        public bool Success { get; private set; }
+
         public string Service { get; set; }
 
         public string Type { get; set; }
@@ -20,6 +22,7 @@ namespace GP.Microservices.Common.ServiceClients
 
         public ServiceError()
         {
+            Success = false;
             TraceId = Guid.NewGuid();
         }
 
