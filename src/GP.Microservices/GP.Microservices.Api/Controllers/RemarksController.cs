@@ -14,7 +14,7 @@ namespace GP.Microservices.Api.Controllers
     /// Remark resource endpoints
     /// </summary>
     [Authorize]
-    [Route("api/remarks")]
+    [Route("api/[controller]")]
     public class RemarksController : ControllerBase
     {
         private readonly IRemarkServiceClient _remarkService;

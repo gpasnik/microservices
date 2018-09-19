@@ -19,6 +19,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -48,7 +49,8 @@ namespace GP.Microservices.Api
         {
             services.AddCors();
             services.AddMvc()
-                .AddControllersAsServices();
+                .AddControllersAsServices()
+                .AddMetrics();
             services.AddAutofac();
             services.AddSwaggerGen(c =>
             {

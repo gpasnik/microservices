@@ -9,7 +9,7 @@ namespace GP.Microservices.Api.Controllers
     /// <summary>
     /// User endpoint
     /// </summary>
-    [Route("api/users")]
+    [Route("api/[controller]")]
     public class UsersController : Controller
     {
         private readonly IUserServiceClient _userService;

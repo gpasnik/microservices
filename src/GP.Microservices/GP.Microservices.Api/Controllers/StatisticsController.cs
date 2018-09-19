@@ -2,7 +2,7 @@
 
 namespace GP.Microservices.Api.Controllers
 {
-    [Route("api/statistics")]
+    [Route("api/[controller]")]
     public class StatisticsController : Controller
     {
         /// <summary>

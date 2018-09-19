@@ -11,7 +11,7 @@ namespace GP.Microservices.Api.Controllers
     /// <summary>
     /// Account endpoint
     /// </summary>
-    [Route("api/account")]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly IJwtTokenService _jwtHandler;
