@@ -2,13 +2,17 @@
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.Formatters.InfluxDB;
 using App.Metrics.Reporting.InfluxDB;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using GP.Microservices.Api.Consumers;
+using GP.Microservices.Api.Metrics;
 using GP.Microservices.Common;
 using GP.Microservices.Common.Authentication;
+using GP.Microservices.Common.Messages.Remarks.Events;
 using GP.Microservices.Common.Middlewares;
 using GP.Microservices.Common.ServiceClients;
 using MassTransit;
@@ -87,6 +91,8 @@ namespace GP.Microservices.Api
             builder.Populate(services);
             builder.RegisterConsumers(Assembly.GetExecutingAssembly());
             builder.Register(ctx => Configuration).As<IConfiguration>();
+            builder.RegisterType<MetricsOptionsFactory>().AsImplementedInterfaces();
+
             builder.Register(context =>
                 {
                     var config = context.Resolve<IOptions<RabbitMqConfiguration>>().Value;
@@ -98,6 +104,8 @@ namespace GP.Microservices.Api
                             h.Password(config.Password);
                             h.Heartbeat(5);
                         });
+
+                        cfg.ReceiveEndpoint(host, $"GatewayApi:{nameof(RemarkCreated)}", c => c.Consumer<RemarkCreatedConsumer>(context));
                     });
 
                     return busControl;
@@ -114,7 +122,7 @@ namespace GP.Microservices.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
         {
             app.UseCors(o => o.AllowAnyOrigin()
                     .AllowAnyHeader()
@@ -131,6 +139,9 @@ namespace GP.Microservices.Api
             app.UseMetricsAllEndpoints();
             app.UseAuthentication();
             app.UseMvc();
+
+            var busControl = ApplicationContainer.Resolve<IBusControl>();
+            await busControl.StartAsync();
 
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
